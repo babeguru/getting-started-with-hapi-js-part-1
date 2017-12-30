@@ -1,35 +1,24 @@
 import Hapi from 'hapi';
 
-const server = new Hapi.Server();
+const server = new Hapi.Server({
+  host: 'localhost',
+  port: 3000
+});
 
-server.connection( {
+server.route({
+  method: 'GET',
+  path: '/hello',
+  handler: (request, reply) => {
+    return 'Hello World!';
+  }
+});
 
-    port: 8080
-
-} );
-
-server.route( {
-
-    method: 'GET',
-    path: '/hello',
-    handler: ( request, reply ) => {
-
-        reply( 'Hello World!' );
-
-    }
-
-} );
-
-server.start( err => {
-
-    if( err ) {
-
-        // Fancy error handling here
-        console.error( 'Error was handled!' );
-        console.error( err );
-
-    }
-
-    console.log( `Server started at ${ server.info.uri }` );
-
-} );
+server
+  .start()
+  .then(() => {
+    console.log(`Server started at ${server.info.uri}`)
+  })
+  .catch(err =>{
+    console.error('Error was handled!');
+    console.error(err);
+  });
