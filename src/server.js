@@ -1,4 +1,5 @@
 import Hapi from "hapi";
+import Joi from "joi";
 
 const server = new Hapi.Server({
   host: "localhost",
@@ -8,8 +9,16 @@ const server = new Hapi.Server({
 server.route({
   method: "POST",
   path: "/payload",
-  handler: (request, h) => {
-    return { body: request.payload.coba };
+  config: {
+    handler: (request, h) => {
+      return "ok sukses!";
+    },
+    validate: {
+      payload: {
+        nama: Joi.string().min(3),
+        umur: Joi.number()
+      }
+    }
   }
 });
 
